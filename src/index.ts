@@ -14,7 +14,7 @@ app.post('/add-stats', async (c) => {
     return c.text('Stats added!')
 });
 
-app.get('/get-stats', (c) => {
+app.get('/stats', (c) => {
     return c.json(data);
 });
 
