@@ -1,6 +1,12 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors';
 import { getIP } from './services/getIP';
 import { Stats } from './Stats';
+
+const options = {
+    key: Bun.file('key.pem').text(),
+    cert: Bun.file('cert.pem').text()
+};
 
 const app = new Hono();
 
@@ -15,6 +21,16 @@ app.use('*', async (c, next) => {
 
     return await next();
 });
+
+app.use(
+    '*',
+    cors({
+        origin: '*',
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowHeaders: ['Content-Type', 'Authorization'],
+        maxAge: 600,
+    })
+);
 
 app.get('/', (c) => {
     return c.text('Hello Hono 1!');
