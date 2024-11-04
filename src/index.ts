@@ -3,11 +3,6 @@ import { cors } from 'hono/cors';
 import { getIP } from './services/getIP';
 import { Stats } from './Stats';
 
-const options = {
-    key: Bun.file('key.pem').text(),
-    cert: Bun.file('cert.pem').text()
-};
-
 const app = new Hono();
 
 app.use('*', async (c, next) => {
