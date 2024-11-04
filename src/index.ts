@@ -1,4 +1,6 @@
 import { Hono } from 'hono'
+import { getIP } from './services/getIP';
+import { Stats } from './Stats';
 
 const app = new Hono();
 
@@ -14,20 +16,20 @@ app.use('*', async (c, next) => {
     return await next();
 });
 
-const data: any[] = ['first record'];
-
 app.get('/', (c) => {
     return c.text('Hello Hono 1!');
 });
 
 app.post('/add-stats', async (c) => {
     const body = await c.req.json();
-    data.push(body);
+    const ip = getIP(c);
+    Stats.add(ip, body);
+
     return c.text('Stats added!');
 });
 
 app.get('/stats', (c) => {
-    return c.json(data);
+    return c.json(Stats.data);
 });
 
 export default app;
